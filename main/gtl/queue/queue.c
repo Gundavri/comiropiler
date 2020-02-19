@@ -1,20 +1,16 @@
+#include "queue.h"
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
-typedef struct {
-    void* base;
-    void* fakeBase;
-    int logLen;
-    int allocLen;
-    int elem_size;
-} Queue;
+
 
 void QueueNew(Queue* q, int elem_size){
     q->logLen = 0;
-    q->allocLen = elem_size;
+    q->allocLen = 1;
     q->elem_size = elem_size;
-    q->fakeBase = malloc(q->allocLen);
-    q->base = q->fakeBase;
+    q->base = malloc(q->elem_size);
+    assert(q->base != NULL);
 }
 
 
@@ -31,26 +27,29 @@ int QueueCapacity(Queue* q){
 }
 
 void* QueueFront(Queue* q){
-    return q->logLen == 0 ? NULL : q->fakeBase;
+    return q->logLen == 0 ? NULL : q->base;
 }
 
 void* QueueBack(Queue* q){
-    return q->logLen == 0 ? NULL : (char*)q->fakeBase + q->elem_size * (q->logLen - 1);
+    return q->logLen == 0 ? NULL : (char*)q->base + q->elem_size * (q->logLen - 1);
 }
 
 void QueueEnqueue(Queue* q, void* elem){
     if(q->logLen >= q->allocLen){
         q->allocLen *= 2;
-        q->fakeBase = realloc(q->fakeBase, q->elem_size * q->allocLen);
+        q->base = realloc(q->base, q->elem_size * q->allocLen);
+        assert(q->base != NULL);
     }
-    memcpy((char*)q->fakeBase + q->logLen * q->elem_size, elem, q->elem_size);
+    memcpy((char*)q->base + q->logLen * q->elem_size, elem, q->elem_size);
     q->logLen++;
 }
 
 void* QueueDequeue(Queue* q){
-    void* elem = QueueFront(q);
+    void* elem = malloc(q->elem_size);
+    assert(elem != NULL);
+    memcpy(elem, QueueFront(q), q->elem_size);
     if(elem == NULL) return NULL;
-    q->fakeBase = (char*)q->fakeBase + q->elem_size;
+    q->base = realloc((char*)q->base + q->elem_size, q->elem_size * q->allocLen);
     q->logLen--;
     return elem;
 }

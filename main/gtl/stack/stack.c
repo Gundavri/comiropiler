@@ -1,18 +1,16 @@
+#include "stack.h"
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
-typedef struct {
-    void* base;
-    int logLen;
-    int allocLen;
-    int elem_size;
-} Stack;
+
 
 void StackNew(Stack* stack, int elem_size){
     stack->logLen = 0;
-    stack->allocLen = elem_size;
+    stack->allocLen = 1;
     stack->elem_size = elem_size;
-    stack->base = malloc(stack->allocLen);
+    stack->base = malloc(stack->elem_size);
+    assert(stack->base != NULL);
 }
 
 int StackIsEmpty(Stack* stack){
@@ -35,13 +33,16 @@ void StackPush(Stack* stack, void* elem){
     if(stack->logLen >= stack->allocLen){
         stack->allocLen *= 2;
         stack->base = realloc(stack->base, stack->elem_size * stack->allocLen);
+        assert(stack->base != NULL);
     }
     memcpy((char*)stack->base + stack->logLen * stack->elem_size, elem, stack->elem_size);
     stack->logLen++;
 }
 
 void* StackPop(Stack* stack){
-    void* elem = StackTop(stack);
+    void* elem = malloc(stack->elem_size);
+    assert(elem != NULL);
+    memcpy(elem, StackTop(stack), stack->elem_size);
     if(elem == NULL) return NULL;
     stack->logLen--;
     return elem;
