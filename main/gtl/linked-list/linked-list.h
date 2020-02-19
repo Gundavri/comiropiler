@@ -26,4 +26,16 @@ void* LinkedListGet(LinkedList* ll, int index);
 
 void LinkedListInsert(LinkedList* ll, void* elem, int elem_size, CellFreeFunction freeFn, int index);
 
+void LinkedListRemove(LinkedList* ll, int index);
+
+void LinkedListPush(LinkedList* ll, void* elem, int elem_size, CellFreeFunction freeFn);
+
+void LinkedListPop(LinkedList* ll);
+
+void LinkedListShift(LinkedList* ll);
+
+void LinkedListUnshift(LinkedList* ll, void* elem, int elem_size, CellFreeFunction freeFn);
+
+void LinkedListDestroy(LinkedList* ll);
+
 #endif

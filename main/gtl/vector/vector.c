@@ -44,7 +44,7 @@ void VectorInsert(Vector* vec, void* elem, int index){
 
 void VectorRemove(Vector* vec, int index){
     if(index < 0 || index > vec->logLen) return;
-
+    if(vec->freeFn != NULL) vec->freeFn((char*)vec->base + vec->elem_size * index);
     memmove((char*)vec->base + vec->elem_size * index, (char*)vec->base + vec->elem_size * (index + 1), vec->elem_size * (vec->logLen - index - 1));
 }
 
@@ -71,6 +71,11 @@ void VectorSort(Vector* vec, VectorCompareFunction cmpFn){
 }
 
 void VectorDestroy(Vector* vec){
+    if(vec->freeFn != NULL){
+        for(int i=0; i<vec->logLen; i++){
+            vec->freeFn(VectorGet(vec, i));   
+        }
+    }
     free(vec->base);
 }
 
