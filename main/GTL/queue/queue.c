@@ -57,7 +57,3 @@ void* QueueDequeue(Queue* q){
 void QueueDestroy(Queue* q){
     free(q->base);
 }
-
-int main(){
-    return 0;
-}

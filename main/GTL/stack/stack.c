@@ -51,7 +51,3 @@ void* StackPop(Stack* stack){
 void StackDestroy(Stack* stack){
     free(stack->base);
 }
-
-int main(){
-    return 0;
-}

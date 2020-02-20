@@ -64,8 +64,8 @@ void LinkedListRemove(LinkedList* ll, int index){
             temp = temp->next;
         }
         Cell* t = temp->next;
-        if(t->freeFn != NULL) t->freeFn(temp->next->base);
-        temp->next = temp->next->next;
+        if(t->freeFn != NULL) t->freeFn(((Cell*)temp->next)->base);
+        temp->next = ((Cell*)temp->next)->next;
         free(t);
     }
     ll->length--;
@@ -95,8 +95,4 @@ void LinkedListDestroy(LinkedList* ll){
         free(ll->head);
         ll->head = t;
     }
-}
-
-int main(){
-    return 0;
 }

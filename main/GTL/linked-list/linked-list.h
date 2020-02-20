@@ -7,7 +7,7 @@ typedef struct {
     void* base;
     int elem_size;
     CellFreeFunction freeFn;
-    Cell* next;
+    void* next;
 } Cell;
 
 typedef struct {

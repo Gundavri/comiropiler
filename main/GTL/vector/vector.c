@@ -78,7 +78,3 @@ void VectorDestroy(Vector* vec){
     }
     free(vec->base);
 }
-
-int main(){
-    return 0;
-}
