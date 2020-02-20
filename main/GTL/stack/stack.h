@@ -1,18 +1,15 @@
 #ifndef _stack_
 #define _stack_
 
-typedef void (*StackFreeFunction)(void *elem);
-
 typedef struct {
     void* base;
     int logLen;
     int allocLen;
     int elem_size;
-    StackFreeFunction freeFn;
 } Stack;
 
 
-void StackNew(Stack* stack, int elem_size, StackFreeFunction freeFn);
+void StackNew(Stack* stack, int elem_size);
 
 int StackIsEmpty(Stack* stack);
 

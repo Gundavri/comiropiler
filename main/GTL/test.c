@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include "./queue/queue.h"
 #include "./stack/stack.h"
 #include "./vector/vector.h"
@@ -44,17 +43,17 @@ void testLinkedListStruct();
 
 int main(){
     testStack();
-    // testQueue();
-    // testVector();
-    // testLinkedList();
+    testQueue();
+    testVector();
+    testLinkedList();
     return 0;
 }
 
 
 void testStack() {
-    // testStackInt();
+    testStackInt();
     testStackChar();
-    // testStackStruct();
+    testStackStruct();
 }
 
 void testQueue() {
@@ -77,12 +76,11 @@ void testLinkedList(){
 
 // Stacks
 void testStackInt(){
-    int num = 10000;
     Stack* s;
-    StackNew(s, sizeof(int), NULL);
+    StackNew(&s, sizeof(int));
     if(StackSize(s) == 0 && StackIsEmpty(s)) printf("StackInt ---size--- |Good|\n");
     else printf("StackInt ---size--- |Bad|\n");
-    for(int i=0; i<num; i++){
+    for(int i=0; i<10000; i++){
         StackPush(s, &i);
         if(StackSize(s) == i+1) printf("StackInt ---size--- |Good|\n");
         else printf("StackInt ---size--- |Bad|\n");
@@ -90,40 +88,18 @@ void testStackInt(){
         else printf("StackInt ---top--- |Bad|\n");
     }
     printf("StackInt ---stackcapacity--- %d\n", StackCapacity(s));
-    for(int i=0; i<num; i++){
+    for(int i=0; i<10000; i++){
         StackPop(s);
-        if(StackTop(s) == NULL || *(int*)StackTop(s) == num-2-i) printf("StackInt ---top--- |Good|\n");
-        else printf("StackInt ---top--- |Bad|\n");
-        if(StackSize(s) == num-1-i) printf("StackInt ---size--- |Good|\n");
+        if(StackSize(s) == 999-i) printf("StackInt ---size--- |Good|\n");
         else printf("StackInt ---size--- |Bad|\n");
+        if(*(int*)StackTop(s) == 998-i) printf("StackInt ---top--- |Good|\n");
+        else printf("StackInt ---top--- |Bad|\n");
     }
     StackDestroy(s);
 }
 
 void testStackChar(){
-    int num = 10;
-    char* c = "blaaaa";
-    printf("%s %d\n", c, sizeof(char*));
-    Stack* s;
-    StackNew(s, 8, NULL);
-    // if(StackSize(s) == 0 && StackIsEmpty(s)) printf("StackChar ---size--- |Good|\n");
-    // else printf("StackChar ---size--- |Bad|\n");
-    // for(int i=0; i<num; i++){
-    //     StackPush(s, &c);
-    //     if(StackSize(s) == i+1) printf("StackChar ---size--- |Good|\n");
-    //     else printf("StackChar ---size--- |Bad|\n");
-    //     if(strcmp(*(char**)StackTop(s),c) == 0) printf("StackChar ---top--- |Good|\n");
-    //     else printf("StackChar ---top--- |Bad|\n");
-    // }
-    // printf("StackChar ---stackcapacity--- %d\n", StackCapacity(s));
-    // for(int i=0; i<num; i++){
-    //     StackPop(s);
-    //     if(strcmp(*(char**)StackTop(s),c) == 0) printf("StackChar ---top--- |Good|\n");
-    //     else printf("StackChar ---top--- |Bad|\n");
-    //     if(StackSize(s) == num-1-i) printf("StackChar ---size--- |Good|\n");
-    //     else printf("StackChar ---size--- |Bad|\n");
-    // }
-    // StackDestroy(s);
+
 }
 
 void testStackStruct(){
