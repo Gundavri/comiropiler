@@ -1,14 +1,17 @@
 #ifndef _queue_
 #define _queue_
 
+typedef void (*QueueFreeFunction)(void *elem);
+
 typedef struct {
     void* base;
     int logLen;
     int allocLen;
     int elem_size;
+    QueueFreeFunction freeFn;
 } Queue;
 
-void QueueNew(Queue* q, int elem_size);
+void QueueNew(Queue* q, int elem_size, QueueFreeFunction freeFn);
 
 int QueueIsEmpty(Queue* q);
 

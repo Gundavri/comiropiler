@@ -4,13 +4,13 @@
 #include <assert.h>
 
 
-
-void QueueNew(Queue* q, int elem_size){
+void QueueNew(Queue* q, int elem_size, QueueFreeFunction freeFn){
     q->logLen = 0;
     q->allocLen = 1;
     q->elem_size = elem_size;
     q->base = malloc(q->elem_size);
     assert(q->base != NULL);
+    q->freeFn = freeFn;
 }
 
 
@@ -27,11 +27,17 @@ int QueueCapacity(Queue* q){
 }
 
 void* QueueFront(Queue* q){
-    return q->logLen == 0 ? NULL : q->base;
+    if(q->logLen == 0) return NULL;
+    void* elem = malloc(q->elem_size);
+    memcpy(elem, q->base, q->elem_size);
+    return elem;
 }
 
 void* QueueBack(Queue* q){
-    return q->logLen == 0 ? NULL : (char*)q->base + q->elem_size * (q->logLen - 1);
+    if(q->logLen == 0) return NULL;
+    void* elem = malloc(q->elem_size);
+    memcpy(elem, (char*)q->base + q->elem_size * (q->logLen - 1), q->elem_size);
+    return elem;
 }
 
 void QueueEnqueue(Queue* q, void* elem){
@@ -45,15 +51,22 @@ void QueueEnqueue(Queue* q, void* elem){
 }
 
 void* QueueDequeue(Queue* q){
-    void* elem = malloc(q->elem_size);
-    assert(elem != NULL);
-    memcpy(elem, QueueFront(q), q->elem_size);
+    void* elem = QueueFront(q);
     if(elem == NULL) return NULL;
-    q->base = realloc((char*)q->base + q->elem_size, q->elem_size * q->allocLen);
+    if(q->freeFn != NULL) q->freeFn(q->base);
     q->logLen--;
+    void* newBase = malloc(q->elem_size * q->logLen);
+    memcpy(newBase, (char*)q->base + q->elem_size, q->elem_size * q->logLen);
+    free(q->base);
+    q->base = newBase;
     return elem;
 }
 
 void QueueDestroy(Queue* q){
+    if(q->freeFn != NULL){
+        for(int i=0; i<q->logLen; i++){
+            q->freeFn((char*)q->base + i * q->elem_size);
+        }
+    }
     free(q->base);
 }

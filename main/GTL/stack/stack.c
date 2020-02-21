@@ -52,5 +52,10 @@ void* StackPop(Stack* stack){
 } 
 
 void StackDestroy(Stack* stack){
+    if(stack->freeFn != NULL){
+        for(int i=0; i<stack->logLen; i++){
+            stack->freeFn((char*)stack->base + i * stack->elem_size);
+        }
+    }
     free(stack->base);
 }

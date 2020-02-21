@@ -13,17 +13,20 @@ typedef struct{
  char c;
  char* d;
  int e[3];
+ void* f;
 } tt;
 
-int num = 100;
+int num = 10;
 char* txt = "abcde-!@#$^&*()+zxc";
 tt* strtt;
 
 void allocStruct(){
     strtt = malloc(sizeof(tt));
     strtt->a = 5;
+    strtt->b = malloc(sizeof(int));
     strtt->b = &(strtt->a);
     strtt->c = 'a';
+    strtt->d = malloc(sizeof(char));
     strtt->d = &(strtt->c);
     strtt->e[0] = 1;
     strtt->e[1] = 2;
@@ -39,6 +42,7 @@ int structCmp(tt* tt1, tt* tt2){
     }
     return 0;
 }
+
 
 void testStack();
 
@@ -79,14 +83,14 @@ int main(){
 
 
 void testStack() {
-    testStackInt();
-    testStackChar();
+    // testStackInt();
+    // testStackChar();
     testStackStruct();
 }
 
 void testQueue() {
-    testQueueInt();
-    testQueueChar();
+    // testQueueInt();
+    // testQueueChar();
     testQueueStruct();
 }
 
@@ -117,7 +121,8 @@ void testStackInt(){
     }
     printf("StackInt ---stackcapacity--- %d\n", StackCapacity(s));
     for(int i=0; i<num; i++){
-        StackPop(s);
+        if(*(int*)StackPop(s) == num-1-i) printf("StackInt ---pop--- |Good|\n");
+        else printf("StackInt ---pop--- |Bad|\n");
         if(StackSize(s) == num-1-i) printf("StackInt ---size--- |Good|\n");
         else printf("StackInt ---size--- |Bad|\n");
         if(StackTop(s) == NULL || *(int*)StackTop(s) == num-i-2) printf("StackInt ---top--- |Good|\n");
@@ -140,7 +145,8 @@ void testStackChar(){
     }
     printf("StackChar ---stackcapacity--- %d\n", StackCapacity(s));
     for(int i=0; i<num; i++){
-        StackPop(s);
+        if(strcmp(*(char**)StackPop(s), txt) == 0) printf("StackChar ---pop--- |Good|\n");
+        else printf("StackChar ---pop--- |Bad|\n");
         if(StackSize(s) == num-1-i) printf("StackChar ---size--- |Good|\n");
         else printf("StackChar ---size--- |Bad|\n");
         if(StackTop(s) == NULL || strcmp(*(char**)StackTop(s), txt) == 0) printf("StackChar ---top--- |Good|\n");
@@ -163,7 +169,8 @@ void testStackStruct(){
     }
     printf("StackStruct ---stackcapacity--- %d\n", StackCapacity(s));
     for(int i=0; i<num; i++){
-        StackPop(s);
+        if(structCmp(StackPop(s), strtt) == 0) printf("StackStruct ---pop--- |Good|\n");
+        else printf("StackStruct ---pop--- |Bad|\n");
         if(StackSize(s) == num-1-i) printf("StackStruct ---size--- |Good|\n");
         else printf("StackStruct ---size--- |Bad|\n");
         if(StackTop(s) == NULL || structCmp(StackTop(s), strtt) == 0) printf("StackStruct ---top--- |Good|\n");
@@ -175,15 +182,87 @@ void testStackStruct(){
 
 // Queues
 void testQueueInt(){
-
+    Queue* q = malloc(sizeof(Queue));
+    QueueNew(q, sizeof(int), NULL);
+    if(QueueSize(q) == 0 && QueueIsEmpty(q)) printf("QueueInt ---size--- |Good|\n");
+    else printf("QueueInt ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        QueueEnqueue(q, &i);
+        if(QueueSize(q) == i+1) printf("QueueInt ---size--- |Good|\n");
+        else printf("QueueInt ---size--- |Bad|\n");
+        if(*(int*)QueueBack(q) == i) printf("QueueInt ---back--- |Good|\n");
+        else printf("QueueInt ---back--- |Bad|\n");
+        if(*(int*)QueueFront(q) == 0) printf("QueueInt ---front--- |Good|\n");
+        else printf("QueueInt ---front--- |Bad|\n");
+    }
+    printf("QueueInt ---queuecapacity--- %d\n", QueueCapacity(q));
+    for(int i=0; i<num; i++){
+        if(*(int*)QueueDequeue(q) == i) printf("QueueInt ---dequeue--- |Good|\n");
+        else printf("QueueInt ---dequeue--- |Bad|\n");
+        if(QueueSize(q) == num-1-i) printf("QueueInt ---size--- |Good|\n");
+        else printf("QueueInt ---size--- |Bad|\n");
+        if(QueueBack(q) == NULL || *(int*)QueueBack(q) == num-1) printf("QueueInt ---back--- |Good|\n");
+        else printf("QueueInt ---back--- |Bad|\n");
+        if(QueueFront(q) == NULL || *(int*)QueueFront(q) == i+1) printf("QueueInt ---front--- |Good|\n");
+        else printf("QueueInt ---front--- |Bad|\n");
+    }
+    QueueDestroy(q);
 }
 
 void testQueueChar(){
-
+    Queue* q = malloc(sizeof(Queue));
+    QueueNew(q, sizeof(char*), NULL);
+    if(QueueSize(q) == 0 && QueueIsEmpty(q)) printf("QueueChar ---size--- |Good|\n");
+    else printf("QueueChar ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        QueueEnqueue(q, &txt);
+        if(QueueSize(q) == i+1) printf("QueueChar ---size--- |Good|\n");
+        else printf("QueueChar ---size--- |Bad|\n");
+        if(strcmp(*(char**)QueueBack(q), txt) == 0) printf("QueueChar ---back--- |Good|\n");
+        else printf("QueueChar ---back--- |Bad|\n");
+        if(strcmp(*(char**)QueueFront(q), txt) == 0) printf("QueueChar ---front--- |Good|\n");
+        else printf("QueueChar ---front--- |Bad|\n");
+    }
+    printf("QueueChar ---queuecapacity--- %d\n", QueueCapacity(q));
+    for(int i=0; i<num; i++){
+        if(strcmp(*(char**)QueueDequeue(q), txt) == 0) printf("QueueChar ---dequeue--- |Good|\n");
+        else printf("QueueChar ---dequeue--- |Bad|\n");
+        if(QueueSize(q) == num-1-i) printf("QueueChar ---size--- |Good|\n");
+        else printf("QueueChar ---size--- |Bad|\n");
+        if(QueueBack(q) == NULL || strcmp(*(char**)QueueBack(q), txt) == 0) printf("QueueChar ---back--- |Good|\n");
+        else printf("QueueChar ---back--- |Bad|\n");
+        if(QueueFront(q) == NULL || strcmp(*(char**)QueueFront(q), txt) == 0) printf("QueueChar ---front--- |Good|\n");
+        else printf("QueueChar ---front--- |Bad|\n");
+    }
+    QueueDestroy(q);
 }
 
 void testQueueStruct(){
-
+    Queue* q = malloc(sizeof(Queue));
+    QueueNew(q, sizeof(tt), NULL);
+    if(QueueSize(q) == 0 && QueueIsEmpty(q)) printf("QueueStruct ---size--- |Good|\n");
+    else printf("QueueStruct ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        QueueEnqueue(q, strtt);
+        if(QueueSize(q) == i+1) printf("QueueStruct ---size--- |Good|\n");
+        else printf("QueueStruct ---size--- |Bad|\n");
+        if(structCmp(QueueBack(q), strtt) == 0) printf("QueueStruct ---back--- |Good|\n");
+        else printf("QueueStruct ---back--- |Bad|\n");
+        if(structCmp(QueueFront(q), strtt) == 0) printf("QueueStruct ---front--- |Good|\n");
+        else printf("QueueStruct ---front--- |Bad|\n");
+    }
+    printf("QueueStruct ---queuecapacity--- %d\n", QueueCapacity(q));
+    for(int i=0; i<num; i++){
+        if(structCmp(QueueDequeue(q), strtt) == 0) printf("QueueStruct ---dequeue--- |Good|\n");
+        else printf("QueueStruct ---dequeue--- |Bad|\n");
+        if(QueueSize(q) == num-1-i) printf("QueueStruct ---size--- |Good|\n");
+        else printf("QueueStruct ---size--- |Bad|\n");
+        if(QueueBack(q) == NULL || structCmp(QueueBack(q), strtt) == 0) printf("QueueStruct ---back--- |Good|\n");
+        else printf("QueueStruct ---back--- |Bad|\n");
+        if(QueueFront(q) == NULL || structCmp(QueueFront(q), strtt) == 0) printf("QueueStruct ---front--- |Good|\n");
+        else printf("QueueStruct ---front--- |Bad|\n");
+    }
+    QueueDestroy(q);
 }
 
 
