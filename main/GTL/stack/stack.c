@@ -5,12 +5,13 @@
 
 
 
-void StackNew(Stack* stack, int elem_size){
+void StackNew(Stack* stack, int elem_size, StackFreeFunction freeFn){
     stack->logLen = 0;
     stack->allocLen = 1;
     stack->elem_size = elem_size;
     stack->base = malloc(stack->elem_size);
     assert(stack->base != NULL);
+    stack->freeFn = freeFn;
 }
 
 int StackIsEmpty(Stack* stack){
@@ -26,7 +27,10 @@ int StackCapacity(Stack* stack){
 }
 
 void* StackTop(Stack* stack){
-    return stack->logLen == 0 ? NULL : (char*)stack->base + (stack->logLen - 1)*stack->elem_size;
+    if(stack->logLen == 0) return NULL;
+    void* elem = malloc(stack->elem_size);
+    memcpy(elem, (char*)stack->base + (stack->logLen - 1)*stack->elem_size, stack->elem_size);
+    return elem;
 }
 
 void StackPush(Stack* stack, void* elem){
@@ -40,10 +44,9 @@ void StackPush(Stack* stack, void* elem){
 }
 
 void* StackPop(Stack* stack){
-    void* elem = malloc(stack->elem_size);
-    assert(elem != NULL);
-    memcpy(elem, StackTop(stack), stack->elem_size);
+    void* elem = StackTop(stack);
     if(elem == NULL) return NULL;
+    if(stack->freeFn != NULL) stack->freeFn((char*)stack->base + (stack->logLen - 1)*stack->elem_size);
     stack->logLen--;
     return elem;
 } 
