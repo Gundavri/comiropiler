@@ -43,6 +43,12 @@ int structCmp(tt* tt1, tt* tt2){
     return 0;
 }
 
+int compareFn(const void* vp1, const void* vp2){
+    int a = *(int*)vp1;
+    int b = *(int*)vp2;
+    return a-b;
+}
+
 
 void testStack();
 
@@ -74,8 +80,8 @@ void testLinkedListStruct();
 
 int main(){
     allocStruct();
-    testStack();
-    testQueue();
+    // testStack();
+    // testQueue();
     testVector();
     // testLinkedList();
     return 0;
@@ -96,8 +102,8 @@ void testQueue() {
 
 void testVector(){
     testVectorInt();
-    testVectorChar();
-    testVectorStruct();
+    // testVectorChar();
+    // testVectorStruct();
 }
 
 void testLinkedList(){
@@ -304,6 +310,19 @@ void testVectorInt(){
         if(VectorGet(v, 0) == NULL || *(int*)VectorGet(v, 0) == num-i-2) printf("VectorInt ---top--- |Good|\n");
         else printf("VectorInt ---top--- |Bad|\n");
     }
+    for(int i=0; i<num; i++){
+        VectorUnshift(v, &i);
+    }
+    VectorSort(v, compareFn);
+    int isSorted = 1;
+    for(int i=0; i<num; i++){
+        if(*(int*)VectorGet(v, i) != i){
+            isSorted = 0;
+            break;
+        }
+    }
+    if(isSorted) printf("VectorInt ---sorted--- |Good|\n");
+    else printf("VectorInt ---sorted--- |Bad|\n");
     VectorDestroy(v);
 }
 

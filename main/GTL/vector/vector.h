@@ -36,6 +36,8 @@ void VectorShift(Vector* vec);
 
 void VectorUnshift(Vector* vec, void* elem);
 
+void VectorSort(Vector* vec, VectorCompareFunction cmpFn);
+
 void VectorDestroy(Vector* vec);
 
 #endif
