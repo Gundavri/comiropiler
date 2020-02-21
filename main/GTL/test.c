@@ -74,9 +74,9 @@ void testLinkedListStruct();
 
 int main(){
     allocStruct();
-    testStack();
+    // testStack();
     // testQueue();
-    // testVector();
+    testVector();
     // testLinkedList();
     return 0;
 }
@@ -89,15 +89,15 @@ void testStack() {
 }
 
 void testQueue() {
-    // testQueueInt();
-    // testQueueChar();
+    testQueueInt();
+    testQueueChar();
     testQueueStruct();
 }
 
 void testVector(){
     testVectorInt();
-    testVectorChar();
-    testVectorStruct();
+    // testVectorChar();
+    // testVectorStruct();
 }
 
 void testLinkedList(){
