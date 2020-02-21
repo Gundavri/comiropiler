@@ -16,7 +16,7 @@ typedef struct{
  void* f;
 } tt;
 
-int num = 100;
+int num = 10000;
 char* txt = "abcde-!@#$^&*()+zxc";
 tt* strtt;
 
@@ -74,8 +74,8 @@ void testLinkedListStruct();
 
 int main(){
     allocStruct();
-    // testStack();
-    // testQueue();
+    testStack();
+    testQueue();
     testVector();
     // testLinkedList();
     return 0;
@@ -96,8 +96,8 @@ void testQueue() {
 
 void testVector(){
     testVectorInt();
-    // testVectorChar();
-    // testVectorStruct();
+    testVectorChar();
+    testVectorStruct();
 }
 
 void testLinkedList(){
@@ -269,7 +269,7 @@ void testQueueStruct(){
 // Vectors
 void testVectorInt(){
     Vector* v = malloc(sizeof(Vector));
-    VectorNew(v, sizeof(Vector), NULL);
+    VectorNew(v, sizeof(int), NULL);
     if(VectorSize(v) == 0 && VectorIsEmpty(v)) printf("VectorInt ---size--- |Good|\n");
     else printf("VectorInt ---size--- |Bad|\n");
     for(int i=0; i<num; i++){
@@ -308,11 +308,83 @@ void testVectorInt(){
 }
 
 void testVectorChar(){
-
+    Vector* v = malloc(sizeof(Vector));
+    VectorNew(v, sizeof(char*), NULL);
+    if(VectorSize(v) == 0 && VectorIsEmpty(v)) printf("VectorChar ---size--- |Good|\n");
+    else printf("VectorChar ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        VectorPush(v, &txt);
+        if(VectorSize(v) == i+1) printf("VectorChar ---size--- |Good|\n");
+        else printf("VectorChar ---size--- |Bad|\n");
+        if(strcmp(*(char**)VectorGet(v, VectorSize(v)-1), txt) == 0) printf("VectorChar ---get--- |Good|\n");
+        else printf("VectorChar ---get--- |Bad|\n");
+    }
+    printf("VectorChar ---vectorcapacity--- %d\n", VectorCapacity(v));
+    for(int i=0; i<num; i++){
+        VectorPop(v);
+        if(VectorSize(v) == num-1-i) printf("VectorChar ---size--- |Good|\n");
+        else printf("VectorChar ---size--- |Bad|\n");
+        if(VectorGet(v, VectorSize(v)-1) == NULL || strcmp(*(char**)VectorGet(v, VectorSize(v)-1), txt) == 0) printf("VectorChar ---top--- |Good|\n");
+        else printf("VectorChar ---top--- |Bad|\n");
+    }
+    if(VectorSize(v) == 0) printf("VectorChar ---size--- |Good|\n");
+    else printf("VectorChar ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        VectorUnshift(v, &txt);
+        if(VectorSize(v) == i+1) printf("VectorChar ---size--- |Good|\n");
+        else printf("VectorChar ---size--- |Bad|\n");
+        if(strcmp(*(char**)VectorGet(v, 0), txt) == 0) printf("VectorChar ---get--- |Good|\n");
+        else printf("VectorChar ---get--- |Bad|\n");
+    }
+    printf("VectorChar ---vectorcapacity--- %d\n", VectorCapacity(v));
+    for(int i=0; i<num; i++){
+        VectorShift(v);
+        if(VectorSize(v) == num-1-i) printf("VectorChar ---size--- |Good|\n");
+        else printf("VectorChar ---size--- |Bad|\n");
+        if(VectorGet(v, 0) == NULL || strcmp(*(char**)VectorGet(v, 0), txt) == 0) printf("VectorChar ---top--- |Good|\n");
+        else printf("VectorChar ---top--- |Bad|\n");
+    }
+    VectorDestroy(v);
 }
 
 void testVectorStruct(){
-
+    Vector* v = malloc(sizeof(Vector));
+    VectorNew(v, sizeof(tt), NULL);
+    if(VectorSize(v) == 0 && VectorIsEmpty(v)) printf("VectorStruct ---size--- |Good|\n");
+    else printf("VectorStruct ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        VectorPush(v, strtt);
+        if(VectorSize(v) == i+1) printf("VectorStruct ---size--- |Good|\n");
+        else printf("VectorStruct ---size--- |Bad|\n");
+        if(structCmp(VectorGet(v, VectorSize(v)-1), strtt) == 0) printf("VectorStruct ---get--- |Good|\n");
+        else printf("VectorStruct ---get--- |Bad|\n");
+    }
+    printf("VectorStruct ---vectorcapacity--- %d\n", VectorCapacity(v));
+    for(int i=0; i<num; i++){
+        VectorPop(v);
+        if(VectorSize(v) == num-1-i) printf("VectorStruct ---size--- |Good|\n");
+        else printf("VectorStruct ---size--- |Bad|\n");
+        if(VectorGet(v, VectorSize(v)-1) == NULL || structCmp(VectorGet(v, VectorSize(v)-1), strtt) == 0) printf("VectorStruct ---top--- |Good|\n");
+        else printf("VectorStruct ---top--- |Bad|\n");
+    }
+    if(VectorSize(v) == 0) printf("VectorStruct ---size--- |Good|\n");
+    else printf("VectorStruct ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        VectorUnshift(v, strtt);
+        if(VectorSize(v) == i+1) printf("VectorStruct ---size--- |Good|\n");
+        else printf("VectorStruct ---size--- |Bad|\n");
+        if(structCmp(VectorGet(v, 0), strtt) == 0) printf("VectorStruct ---get--- |Good|\n");
+        else printf("VectorStruct ---get--- |Bad|\n");
+    }
+    printf("VectorStruct ---vectorcapacity--- %d\n", VectorCapacity(v));
+    for(int i=0; i<num; i++){
+        VectorShift(v);
+        if(VectorSize(v) == num-1-i) printf("VectorStruct ---size--- |Good|\n");
+        else printf("VectorStruct ---size--- |Bad|\n");
+        if(VectorGet(v, 0) == NULL || structCmp(VectorGet(v, 0), strtt) == 0) printf("VectorStruct ---top--- |Good|\n");
+        else printf("VectorStruct ---top--- |Bad|\n");
+    }
+    VectorDestroy(v);
 }
 
 
