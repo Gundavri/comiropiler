@@ -16,7 +16,7 @@ typedef struct{
  void* f;
 } tt;
 
-int num = 10;
+int num = 100;
 char* txt = "abcde-!@#$^&*()+zxc";
 tt* strtt;
 
@@ -83,8 +83,8 @@ int main(){
 
 
 void testStack() {
-    // testStackInt();
-    // testStackChar();
+    testStackInt();
+    testStackChar();
     testStackStruct();
 }
 
@@ -268,7 +268,43 @@ void testQueueStruct(){
 
 // Vectors
 void testVectorInt(){
-
+    Vector* v = malloc(sizeof(Vector));
+    VectorNew(v, sizeof(Vector), NULL);
+    if(VectorSize(v) == 0 && VectorIsEmpty(v)) printf("VectorInt ---size--- |Good|\n");
+    else printf("VectorInt ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        VectorPush(v, &i);
+        if(VectorSize(v) == i+1) printf("VectorInt ---size--- |Good|\n");
+        else printf("VectorInt ---size--- |Bad|\n");
+        if(*(int*)VectorGet(v, VectorSize(v)-1) == i) printf("VectorInt ---get--- |Good|\n");
+        else printf("VectorInt ---get--- |Bad|\n");
+    }
+    printf("VectorInt ---vectorcapacity--- %d\n", VectorCapacity(v));
+    for(int i=0; i<num; i++){
+        VectorPop(v);
+        if(VectorSize(v) == num-1-i) printf("VectorInt ---size--- |Good|\n");
+        else printf("VectorInt ---size--- |Bad|\n");
+        if(VectorGet(v, VectorSize(v)-1) == NULL || *(int*)VectorGet(v, VectorSize(v)-1) == num-i-2) printf("VectorInt ---top--- |Good|\n");
+        else printf("VectorInt ---top--- |Bad|\n");
+    }
+    if(VectorSize(v) == 0) printf("VectorInt ---size--- |Good|\n");
+    else printf("VectorInt ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        VectorUnshift(v, &i);
+        if(VectorSize(v) == i+1) printf("VectorInt ---size--- |Good|\n");
+        else printf("VectorInt ---size--- |Bad|\n");
+        if(*(int*)VectorGet(v, 0) == i) printf("VectorInt ---get--- |Good|\n");
+        else printf("VectorInt ---get--- |Bad|\n");
+    }
+    printf("VectorInt ---vectorcapacity--- %d\n", VectorCapacity(v));
+    for(int i=0; i<num; i++){
+        VectorShift(v);
+        if(VectorSize(v) == num-1-i) printf("VectorInt ---size--- |Good|\n");
+        else printf("VectorInt ---size--- |Bad|\n");
+        if(VectorGet(v, 0) == NULL || *(int*)VectorGet(v, 0) == num-i-2) printf("VectorInt ---top--- |Good|\n");
+        else printf("VectorInt ---top--- |Bad|\n");
+    }
+    VectorDestroy(v);
 }
 
 void testVectorChar(){

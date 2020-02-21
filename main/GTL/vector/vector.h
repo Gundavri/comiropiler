@@ -36,4 +36,6 @@ void VectorShift(Vector* vec);
 
 void VectorUnshift(Vector* vec, void* elem);
 
+void VectorDestroy(Vector* vec);
+
 #endif

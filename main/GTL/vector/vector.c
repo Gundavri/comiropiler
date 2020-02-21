@@ -38,16 +38,18 @@ void VectorInsert(Vector* vec, void* elem, int index){
 
     if(vec->logLen >= vec->allocLen) {
         vec->allocLen *= 2;
-        vec->base = realloc(vec->base, vec->allocLen);
+        vec->base = realloc(vec->base, vec->allocLen * vec->elem_size);
     }
     memmove((char*)vec->base + vec->elem_size * (index + 1), (char*)vec->base + vec->elem_size * index, vec->elem_size * (vec->logLen - index));
     memcpy((char*)vec->base + vec->elem_size * index, elem, vec->elem_size);
+    vec->logLen++;
 }
 
 void VectorRemove(Vector* vec, int index){
     if(index < 0 || index >= vec->logLen) return;
     if(vec->freeFn != NULL) vec->freeFn((char*)vec->base + vec->elem_size * index);
     memmove((char*)vec->base + vec->elem_size * index, (char*)vec->base + vec->elem_size * (index + 1), vec->elem_size * (vec->logLen - index - 1));
+    vec->logLen--;
 }
 
 
