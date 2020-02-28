@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include "stdio.h"
 
 void LinkedListNew(LinkedList* ll){
     ll->head = NULL;
@@ -22,13 +23,15 @@ void* LinkedListGet(LinkedList* ll, int index){
     Cell* res = ll->head;
     for(int i=0; i<index; i++){
         res = res->next;
+        printf("%d -- ll index %d\n", *(int*)res->base, index);
     }
-    return res->base;
+    void* elem = malloc(res->elem_size);
+    memcpy(elem, res->base, res->elem_size);
+    return elem;
 }
 
 void LinkedListInsert(LinkedList* ll, void* elem, int elem_size, CellFreeFunction freeFn, int index){
     if(index < 0 || index > ll->length) return;
-
     Cell* newCell = malloc(sizeof(Cell));
     newCell->base = malloc(elem_size);
     assert(newCell != NULL && newCell->base != NULL);
@@ -64,8 +67,8 @@ void LinkedListRemove(LinkedList* ll, int index){
             temp = temp->next;
         }
         Cell* t = temp->next;
-        if(t->freeFn != NULL) t->freeFn(((Cell*)temp->next)->base);
         temp->next = ((Cell*)temp->next)->next;
+        if(t->freeFn != NULL) t->freeFn(t->base);
         free(t);
     }
     ll->length--;

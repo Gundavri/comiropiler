@@ -16,7 +16,7 @@ typedef struct{
  void* f;
 } tt;
 
-int num = 10000;
+int num = 10;
 char* txt = "abcde-!@#$^&*()+zxc";
 tt* strtt;
 
@@ -82,8 +82,8 @@ int main(){
     allocStruct();
     // testStack();
     // testQueue();
-    testVector();
-    // testLinkedList();
+    // testVector();
+    testLinkedList();
     return 0;
 }
 
@@ -102,14 +102,14 @@ void testQueue() {
 
 void testVector(){
     testVectorInt();
-    // testVectorChar();
-    // testVectorStruct();
+    testVectorChar();
+    testVectorStruct();
 }
 
 void testLinkedList(){
     testLinkedListInt();
-    testLinkedListChar();
-    testLinkedListStruct();
+    // testLinkedListChar();
+    // testLinkedListStruct();
 }
 
 // Stacks
@@ -409,7 +409,41 @@ void testVectorStruct(){
 
 // Linked-Lists
 void testLinkedListInt(){
-
+    LinkedList* ll = malloc(sizeof(ll));
+    LinkedListNew(ll);
+    if(LinkedListSize(ll) == 0 && LinkedListIsEmpty(ll)) printf("LinkedListInt ---size--- |Good|\n");
+    else printf("LinkedListInt ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        LinkedListPush(ll, &i, sizeof(int), NULL);
+        if(LinkedListSize(ll) == i+1) printf("LinkedListInt ---size--- |Good|\n");
+        else printf("LinkedListInt ---size--- |Bad|\n");
+        if(*(int*)LinkedListGet(ll, LinkedListSize(ll)-1) == i) printf("LinkedListInt ---get--- |Good|\n");
+        else printf("LinkedListInt ---get--- |Bad|\n");
+    }
+    for(int i=0; i<num; i++){
+        LinkedListPop(ll);
+        if(LinkedListSize(ll) == num-1-i) printf("LinkedListInt ---size--- |Good|\n");
+        else printf("LinkedListInt ---size--- |Bad|\n");
+        if(LinkedListGet(ll, LinkedListSize(ll)-1) == NULL || *(int*)LinkedListGet(ll, LinkedListSize(ll)-1) == num-i-2) printf("LinkedListInt ---top--- |Good|\n");
+        else printf("LinkedListInt ---top--- |Bad|\n");
+    }
+    if(LinkedListSize(ll) == 0) printf("LinkedListInt ---size--- |Good|\n");
+    else printf("LinkedListInt ---size--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        LinkedListUnshift(ll, &i, sizeof(int), NULL);
+        if(LinkedListSize(ll) == i+1) printf("LinkedListInt ---size--- |Good|\n");
+        else printf("LinkedListInt ---size--- |Bad|\n");
+        if(*(int*)LinkedListGet(ll, 0) == i) printf("LinkedListInt ---get--- |Good|\n");
+        else printf("LinkedListInt ---get--- |Bad|\n");
+    }
+    for(int i=0; i<num; i++){
+        LinkedListShift(ll);
+        if(LinkedListSize(ll) == num-1-i) printf("LinkedListInt ---size--- |Good|\n");
+        else printf("LinkedListInt ---size--- |Bad|\n");
+        if(LinkedListGet(ll, 0) == NULL || *(int*)LinkedListGet(ll, 0) == num-i-2) printf("LinkedListInt ---top--- |Good|\n");
+        else printf("LinkedListInt ---top--- |Bad|\n");
+    }
+    LinkedListDestroy(ll);
 }
 
 void testLinkedListChar(){
