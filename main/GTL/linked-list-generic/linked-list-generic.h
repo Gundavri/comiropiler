@@ -1,17 +1,17 @@
 #ifndef _LinkedListGeneric_
 #define _LinkedListGeneric_
 
-typedef void (*CellFreeFunction)(void *elem);
+typedef void (*CellGFreeFunction)(void *elem);
 
-typedef struct nCell {
+typedef struct nCellG {
     void* base;
     int elem_size;
-    CellFreeFunction freeFn;
-    struct nCell* next;
-} Cell;
+    CellGFreeFunction freeFn;
+    struct nCellG* next;
+} CellG;
 
 typedef struct {
-    Cell* head;
+    CellG* head;
     int length;
 } LinkedListGeneric;
 
@@ -24,17 +24,17 @@ int LinkedListGenericSize(LinkedListGeneric* ll);
 
 void* LinkedListGenericGet(LinkedListGeneric* ll, int index);
 
-void LinkedListGenericInsert(LinkedListGeneric* ll, void* elem, int elem_size, CellFreeFunction freeFn, int index);
+void LinkedListGenericInsert(LinkedListGeneric* ll, void* elem, int elem_size, CellGFreeFunction freeFn, int index);
 
 void LinkedListGenericRemove(LinkedListGeneric* ll, int index);
 
-void LinkedListGenericPush(LinkedListGeneric* ll, void* elem, int elem_size, CellFreeFunction freeFn);
+void LinkedListGenericPush(LinkedListGeneric* ll, void* elem, int elem_size, CellGFreeFunction freeFn);
 
 void LinkedListGenericPop(LinkedListGeneric* ll);
 
 void LinkedListGenericShift(LinkedListGeneric* ll);
 
-void LinkedListGenericUnshift(LinkedListGeneric* ll, void* elem, int elem_size, CellFreeFunction freeFn);
+void LinkedListGenericUnshift(LinkedListGeneric* ll, void* elem, int elem_size, CellGFreeFunction freeFn);
 
 void LinkedListGenericDestroy(LinkedListGeneric* ll);
 
