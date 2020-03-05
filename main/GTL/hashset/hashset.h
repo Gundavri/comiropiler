@@ -7,7 +7,7 @@ typedef struct{
     int elem_size;
     int length;
     HashSetFreeFunction freeFn;
-    LinkedList* base;
+    LinkedListGeneric* base;
 } HashSet;
 
 void HashSetNew(HashSet* hs, int elem_size, HashSetFreeFunction freeFn);

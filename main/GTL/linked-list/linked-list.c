@@ -4,9 +4,12 @@
 #include <assert.h>
 #include "stdio.h"
 
-void LinkedListNew(LinkedList* ll){
+
+void LinkedListNew(LinkedList* ll, int elem_size, CellFreeFunction freeFn){
     ll->head = NULL;
     ll->length = 0;
+    ll->elem_size = elem_size;
+    ll->freeFn = freeFn;
 }
 
 int LinkedListIsEmpty(LinkedList* ll){
@@ -19,83 +22,46 @@ int LinkedListSize(LinkedList* ll){
 
 void* LinkedListGet(LinkedList* ll, int index){
     if(index < 0 || index >= ll->length) return NULL;
-    
+
     Cell* res = ll->head;
     for(int i=0; i<index; i++){
         res = res->next;
-        printf("%d -- ll index %d\n", *(int*)res->base, index);
     }
-    void* elem = malloc(res->elem_size);
-    memcpy(elem, res->base, res->elem_size);
+
+    void* elem = malloc(sizeof(ll->elem_size));
+    assert(elem != NULL);
+    memcpy(elem, res->base, ll->elem_size);
     return elem;
 }
 
-void LinkedListInsert(LinkedList* ll, void* elem, int elem_size, CellFreeFunction freeFn, int index){
+void LinkedListInsert(LinkedList* ll, void* elem, int index){
     if(index < 0 || index > ll->length) return;
-    Cell* newCell = malloc(sizeof(Cell));
-    newCell->base = malloc(elem_size);
-    assert(newCell != NULL && newCell->base != NULL);
-    memcpy(newCell->base, elem, elem_size);
-    newCell->elem_size = elem_size;
-    newCell->freeFn = freeFn;
+    Cell* temp = malloc(sizeof(Cell));
+    temp->base = malloc(sizeof(ll->elem_size));
+    memcpy(temp->base, elem, ll->elem_size);
 
     if(index == 0){
-        newCell->next = ll->head;
-        ll->head = newCell;
+        temp->next == ll->head;
+        ll->head = temp;
     } else {
-        Cell* temp = ll->head;
+        Cell* t = ll->head;
         for(int i=1; i<index; i++){
-            temp = temp->next;
+            t = t->next;
         }
-        newCell->next = temp->next;
-        temp->next = newCell->next;
+        temp->next = t->next;
+        t->next = temp;
     }
     ll->length++;
 }
 
-void LinkedListRemove(LinkedList* ll, int index){
-    if(index < 0 || index >= ll->length) return;
+// void LinkedListRemove(LinkedList* ll, int index);
 
-    if(index == 0){
-        if(ll->head->freeFn != NULL) ll->head->freeFn(ll->head->base);
-        Cell* temp = ll->head->next;
-        free(ll->head);
-        ll->head = temp;
-    } else {
-        Cell* temp = ll->head;
-        for(int i=1; i<index; i++){
-            temp = temp->next;
-        }
-        Cell* t = temp->next;
-        temp->next = ((Cell*)temp->next)->next;
-        if(t->freeFn != NULL) t->freeFn(t->base);
-        free(t);
-    }
-    ll->length--;
-}
+// void LinkedListPush(LinkedList* ll, void* elem, int elem_size, CellFreeFunction freeFn);
 
-void LinkedListPush(LinkedList* ll, void* elem, int elem_size, CellFreeFunction freeFn){
-    LinkedListInsert(ll, elem, elem_size, freeFn, ll->length);
-}
+// void LinkedListPop(LinkedList* ll);
 
-void LinkedListPop(LinkedList* ll){
-    LinkedListRemove(ll, ll->length-1);
-}
+// void LinkedListShift(LinkedList* ll);
 
-void LinkedListShift(LinkedList* ll){
-    LinkedListRemove(ll, 0);
-}
+// void LinkedListUnshift(LinkedList* ll, void* elem, int elem_size, CellFreeFunction freeFn);
 
-void LinkedListUnshift(LinkedList* ll, void* elem, int elem_size, CellFreeFunction freeFn){
-    LinkedListInsert(ll, elem, elem_size, freeFn, 0);
-}
-
-
-void LinkedListDestroy(LinkedList* ll){
-    for(int i=0; i<ll->length; i++){
-        Cell* t = ll->head->next;
-        if(ll->head->freeFn != NULL) ll->head->freeFn(ll->head->base);
-        free(ll->head);
-        ll->head = t;
-    }
-}
+// void LinkedListDestroy(LinkedList* ll);
