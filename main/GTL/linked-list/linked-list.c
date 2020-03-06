@@ -21,22 +21,22 @@ int LinkedListSize(LinkedList* ll){
 }
 
 void* LinkedListGet(LinkedList* ll, int index){
-    if(index < 0 || index >= ll->length) return NULL;
+    assert(index >= 0 || index < ll->length);
 
     Cell* res = ll->head;
     for(int i=0; i<index; i++){
         res = res->next;
     }
-    printf("%d\n", ll->elem_size);
+    // printf("%d\n", ll->elem_size);
     void* elem = malloc(ll->elem_size);
-    printf("movedi aqamde\n");
+    // printf("movedi aqamde\n");
     assert(elem != NULL);
     memcpy(elem, res->base, ll->elem_size);
     return elem;
 }
 
 void LinkedListInsert(LinkedList* ll, void* elem, int index){
-    if(index < 0 || index > ll->length) return;
+    assert(index >= 0 || index <= ll->length);
     Cell* temp = malloc(sizeof(Cell));
     temp->base = malloc(sizeof(ll->elem_size));
     assert(temp != NULL && temp->base != NULL);
@@ -57,7 +57,7 @@ void LinkedListInsert(LinkedList* ll, void* elem, int index){
 }
 
 void LinkedListRemove(LinkedList* ll, int index){
-    if(index < 0 || index >= ll->length) return;
+    assert(index >= 0 || index < ll->length);
 
     if(index == 0){
         if(ll->freeFn != NULL) ll->freeFn(ll->head->base);

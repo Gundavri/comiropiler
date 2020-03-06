@@ -18,19 +18,20 @@ int LinkedListGenericSize(LinkedListGeneric* ll){
 }
 
 void* LinkedListGenericGet(LinkedListGeneric* ll, int index){
-    if(index < 0 || index >= ll->length) return NULL;
+    assert(index >= 0 || index < ll->length);
     
     CellG* res = ll->head;
     for(int i=0; i<index; i++){
         res = res->next;
     }
     void* elem = malloc(res->elem_size);
+    assert(elem != NULL);
     memcpy(elem, res->base, res->elem_size);
     return elem;
 }
 
 void LinkedListGenericInsert(LinkedListGeneric* ll, void* elem, int elem_size, CellGFreeFunction freeFn, int index){
-    if(index < 0 || index > ll->length) return;
+    assert(index >= 0 || index <= ll->length);
     CellG* newCellG = malloc(sizeof(CellG));
     newCellG->base = malloc(elem_size);
     assert(newCellG != NULL && newCellG->base != NULL);
@@ -53,7 +54,7 @@ void LinkedListGenericInsert(LinkedListGeneric* ll, void* elem, int elem_size, C
 }
 
 void LinkedListGenericRemove(LinkedListGeneric* ll, int index){
-    if(index < 0 || index >= ll->length) return;
+    assert(index >= 0 || index < ll->length);
 
     if(index == 0){
         if(ll->head->freeFn != NULL) ll->head->freeFn(ll->head->base);

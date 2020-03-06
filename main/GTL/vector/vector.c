@@ -27,18 +27,20 @@ int VectorCapacity(Vector* vec){
 }
 
 void* VectorGet(Vector* vec, int index){
-    if(index < 0 || index >= vec->logLen) return NULL;
+    assert(index >= 0 || index < vec->logLen);
     void* elem = malloc(vec->elem_size);
+    assert(elem != NULL);
     memcpy(elem, (char*)vec->base + index * vec->elem_size, vec->elem_size);
     return elem;
 }
 
 void VectorInsert(Vector* vec, void* elem, int index){
-    if(index < 0 || index > vec->logLen) return; 
+    assert(index >= 0 || index <= vec->logLen); 
 
     if(vec->logLen >= vec->allocLen) {
         vec->allocLen *= 2;
         vec->base = realloc(vec->base, vec->allocLen * vec->elem_size);
+        assert(vec->base != NULL);
     }
     memmove((char*)vec->base + vec->elem_size * (index + 1), (char*)vec->base + vec->elem_size * index, vec->elem_size * (vec->logLen - index));
     memcpy((char*)vec->base + vec->elem_size * index, elem, vec->elem_size);
@@ -46,7 +48,7 @@ void VectorInsert(Vector* vec, void* elem, int index){
 }
 
 void VectorRemove(Vector* vec, int index){
-    if(index < 0 || index >= vec->logLen) return;
+    assert(index >= 0 || index < vec->logLen);
     if(vec->freeFn != NULL) vec->freeFn((char*)vec->base + vec->elem_size * index);
     memmove((char*)vec->base + vec->elem_size * index, (char*)vec->base + vec->elem_size * (index + 1), vec->elem_size * (vec->logLen - index - 1));
     vec->logLen--;
@@ -76,7 +78,7 @@ void VectorSort(Vector* vec, VectorCompareFunction cmpFn){
 
 int VectorFind(Vector* vec, VectorCompareFunction cmpFn, const void* elem, int startIndex, int isSorted){
     if(isSorted) {
-        void* res = bsearch(elem, (char*)vec->base + startIndex * vec->elem_size, vec->logLen, vec->elem_size, cmpFn);
+        void* res = bsearch(elem, (char*)vec->base + startIndex * vec->elem_size, vec->logLen - startIndex, vec->elem_size, cmpFn);
         return res == NULL ? -1 : (res - vec->base) / vec->elem_size;
     }
     for(int i=startIndex; i<vec->logLen; i++){

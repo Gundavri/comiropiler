@@ -27,15 +27,17 @@ int QueueCapacity(Queue* q){
 }
 
 void* QueueFront(Queue* q){
-    if(q->logLen == 0) return NULL;
+    assert(q->logLen != 0);
     void* elem = malloc(q->elem_size);
+    assert(elem != NULL);
     memcpy(elem, q->base, q->elem_size);
     return elem;
 }
 
 void* QueueBack(Queue* q){
-    if(q->logLen == 0) return NULL;
+    assert(q->logLen != 0);
     void* elem = malloc(q->elem_size);
+    assert(elem != NULL);
     memcpy(elem, (char*)q->base + q->elem_size * (q->logLen - 1), q->elem_size);
     return elem;
 }
@@ -52,10 +54,10 @@ void QueueEnqueue(Queue* q, void* elem){
 
 void* QueueDequeue(Queue* q){
     void* elem = QueueFront(q);
-    if(elem == NULL) return NULL;
     if(q->freeFn != NULL) q->freeFn(q->base);
     q->logLen--;
     void* newBase = malloc(q->elem_size * q->logLen);
+    assert(newBase != NULL);
     memcpy(newBase, (char*)q->base + q->elem_size, q->elem_size * q->logLen);
     free(q->base);
     q->base = newBase;

@@ -27,8 +27,9 @@ int StackCapacity(Stack* stack){
 }
 
 void* StackTop(Stack* stack){
-    if(stack->logLen == 0) return NULL;
+    assert(stack->logLen != 0);
     void* elem = malloc(stack->elem_size);
+    assert(elem != NULL);
     memcpy(elem, (char*)stack->base + (stack->logLen - 1)*stack->elem_size, stack->elem_size);
     return elem;
 }
@@ -45,7 +46,6 @@ void StackPush(Stack* stack, void* elem){
 
 void* StackPop(Stack* stack){
     void* elem = StackTop(stack);
-    if(elem == NULL) return NULL;
     if(stack->freeFn != NULL) stack->freeFn((char*)stack->base + (stack->logLen - 1)*stack->elem_size);
     stack->logLen--;
     return elem;

@@ -17,7 +17,7 @@ typedef struct{
  void* f;
 } tt;
 
-int num = 1000;
+int num = 10;
 char* txt = "abcde-!@#$^&*()+zxc";
 tt* strtt;
 
@@ -50,8 +50,7 @@ int structCmpFn(const void* vp1, const void* vp2){
 }
 
 int intCmpFn(const void* vp1, const void* vp2){
-    if(*(int*)vp1 == *(int*)vp2) return 0;
-    return -1;
+    return *(int*)vp1 - *(int*)vp2;
 }
 
 void StructFreeFn(void* elem){
@@ -99,40 +98,40 @@ void testLinkedListStruct();
 int main(){
     // testStack();
     // testQueue();
-    testVector();
-    testLinkedListGeneric();
-    // testLinkedList();
+    // testVector();
+    // testLinkedListGeneric();
+    testLinkedList();
     return 0;
 }
 
 
 void testStack() {
-    // testStackInt();
-    // testStackChar();
+    testStackInt();
+    testStackChar();
     testStackStruct();
 }
 
 void testQueue() {
-    // testQueueInt();
-    // testQueueChar();
+    testQueueInt();
+    testQueueChar();
     testQueueStruct();
 }
 
 void testVector(){
     testVectorInt();
-    // testVectorChar();
-    // testVectorStruct();
+    testVectorChar();
+    testVectorStruct();
 }
 
 void testLinkedListGeneric(){
     testLinkedListGenericInt();
-    // testLinkedListGenericChar();
-    // testLinkedListGenericStruct();
+    testLinkedListGenericChar();
+    testLinkedListGenericStruct();
 }
 
 void testLinkedList(){
-    // testLinkedListInt();
-    // testLinkedListChar();
+    testLinkedListInt();
+    testLinkedListChar();
     testLinkedListStruct();
 }
 
@@ -151,12 +150,12 @@ void testStackInt(){
     }
     printf("StackInt ---stackcapacity--- %d\n", StackCapacity(s));
     for(int i=0; i<num; i++){
+        if(StackSize(s) == num-i) printf("StackInt ---size--- |Good|\n");
+        else printf("StackInt ---size--- |Bad|\n");
+        if(*(int*)StackTop(s) == num-i-1) printf("StackInt ---top--- |Good|\n");
+        else printf("StackInt ---top--- |Bad|\n");
         if(*(int*)StackPop(s) == num-1-i) printf("StackInt ---pop--- |Good|\n");
         else printf("StackInt ---pop--- |Bad|\n");
-        if(StackSize(s) == num-1-i) printf("StackInt ---size--- |Good|\n");
-        else printf("StackInt ---size--- |Bad|\n");
-        if(StackTop(s) == NULL || *(int*)StackTop(s) == num-i-2) printf("StackInt ---top--- |Good|\n");
-        else printf("StackInt ---top--- |Bad|\n");
     }
     StackDestroy(s);
     free(s);
@@ -176,12 +175,12 @@ void testStackChar(){
     }
     printf("StackChar ---stackcapacity--- %d\n", StackCapacity(s));
     for(int i=0; i<num; i++){
+        if(StackSize(s) == num-i) printf("StackChar ---size--- |Good|\n");
+        else printf("StackChar ---size--- |Bad|\n");
+        if(strcmp(*(char**)StackTop(s), txt) == 0) printf("StackChar ---top--- |Good|\n");
+        else printf("StackChar ---top--- |Bad|\n");
         if(strcmp(*(char**)StackPop(s), txt) == 0) printf("StackChar ---pop--- |Good|\n");
         else printf("StackChar ---pop--- |Bad|\n");
-        if(StackSize(s) == num-1-i) printf("StackChar ---size--- |Good|\n");
-        else printf("StackChar ---size--- |Bad|\n");
-        if(StackTop(s) == NULL || strcmp(*(char**)StackTop(s), txt) == 0) printf("StackChar ---top--- |Good|\n");
-        else printf("StackChar ---top--- |Bad|\n");
     }
     StackDestroy(s);
     free(s);
@@ -202,12 +201,12 @@ void testStackStruct(){
     }
     printf("StackStruct ---stackcapacity--- %d\n", StackCapacity(s));
     for(int i=0; i<num; i++){
+        if(StackSize(s) == num-i) printf("StackStruct ---size--- |Good|\n");
+        else printf("StackStruct ---size--- |Bad|\n");
+        if(structCmp(StackTop(s), strtt) == 0) printf("StackStruct ---top--- |Good|\n");
+        else printf("StackStruct ---top--- |Bad|\n");
         if(structCmp(StackPop(s), strtt) == 0) printf("StackStruct ---pop--- |Good|\n");
         else printf("StackStruct ---pop--- |Bad|\n");
-        if(StackSize(s) == num-1-i) printf("StackStruct ---size--- |Good|\n");
-        else printf("StackStruct ---size--- |Bad|\n");
-        if(StackTop(s) == NULL || structCmp(StackTop(s), strtt) == 0) printf("StackStruct ---top--- |Good|\n");
-        else printf("StackStruct ---top--- |Bad|\n");
     }
     StackDestroy(s);
     free(s);
@@ -231,14 +230,14 @@ void testQueueInt(){
     }
     printf("QueueInt ---queuecapacity--- %d\n", QueueCapacity(q));
     for(int i=0; i<num; i++){
+        if(QueueSize(q) == num-i) printf("QueueInt ---size--- |Good|\n");
+        else printf("QueueInt ---size--- |Bad|\n");
+        if(*(int*)QueueBack(q) == num-1) printf("QueueInt ---back--- |Good|\n");
+        else printf("QueueInt ---back--- |Bad|\n");
+        if(*(int*)QueueFront(q) == i) printf("QueueInt ---front--- |Good|\n");
+        else printf("QueueInt ---front--- |Bad|\n");
         if(*(int*)QueueDequeue(q) == i) printf("QueueInt ---dequeue--- |Good|\n");
         else printf("QueueInt ---dequeue--- |Bad|\n");
-        if(QueueSize(q) == num-1-i) printf("QueueInt ---size--- |Good|\n");
-        else printf("QueueInt ---size--- |Bad|\n");
-        if(QueueBack(q) == NULL || *(int*)QueueBack(q) == num-1) printf("QueueInt ---back--- |Good|\n");
-        else printf("QueueInt ---back--- |Bad|\n");
-        if(QueueFront(q) == NULL || *(int*)QueueFront(q) == i+1) printf("QueueInt ---front--- |Good|\n");
-        else printf("QueueInt ---front--- |Bad|\n");
     }
     QueueDestroy(q);
     free(q);
@@ -260,14 +259,14 @@ void testQueueChar(){
     }
     printf("QueueChar ---queuecapacity--- %d\n", QueueCapacity(q));
     for(int i=0; i<num; i++){
+        if(QueueSize(q) == num-i) printf("QueueChar ---size--- |Good|\n");
+        else printf("QueueChar ---size--- |Bad|\n");
+        if(strcmp(*(char**)QueueBack(q), txt) == 0) printf("QueueChar ---back--- |Good|\n");
+        else printf("QueueChar ---back--- |Bad|\n");
+        if(strcmp(*(char**)QueueFront(q), txt) == 0) printf("QueueChar ---front--- |Good|\n");
+        else printf("QueueChar ---front--- |Bad|\n");
         if(strcmp(*(char**)QueueDequeue(q), txt) == 0) printf("QueueChar ---dequeue--- |Good|\n");
         else printf("QueueChar ---dequeue--- |Bad|\n");
-        if(QueueSize(q) == num-1-i) printf("QueueChar ---size--- |Good|\n");
-        else printf("QueueChar ---size--- |Bad|\n");
-        if(QueueBack(q) == NULL || strcmp(*(char**)QueueBack(q), txt) == 0) printf("QueueChar ---back--- |Good|\n");
-        else printf("QueueChar ---back--- |Bad|\n");
-        if(QueueFront(q) == NULL || strcmp(*(char**)QueueFront(q), txt) == 0) printf("QueueChar ---front--- |Good|\n");
-        else printf("QueueChar ---front--- |Bad|\n");
     }
     QueueDestroy(q);
     free(q);
@@ -290,14 +289,14 @@ void testQueueStruct(){
     }
     printf("QueueStruct ---queuecapacity--- %d\n", QueueCapacity(q));
     for(int i=0; i<num; i++){
+        if(QueueSize(q) == num-i) printf("QueueStruct ---size--- |Good|\n");
+        else printf("QueueStruct ---size--- |Bad|\n");
+        if(structCmp(QueueBack(q), strtt) == 0) printf("QueueStruct ---back--- |Good|\n");
+        else printf("QueueStruct ---back--- |Bad|\n");
+        if(structCmp(QueueFront(q), strtt) == 0) printf("QueueStruct ---front--- |Good|\n");
+        else printf("QueueStruct ---front--- |Bad|\n");
         if(structCmp(QueueDequeue(q), strtt) == 0) printf("QueueStruct ---dequeue--- |Good|\n");
         else printf("QueueStruct ---dequeue--- |Bad|\n");
-        if(QueueSize(q) == num-1-i) printf("QueueStruct ---size--- |Good|\n");
-        else printf("QueueStruct ---size--- |Bad|\n");
-        if(QueueBack(q) == NULL || structCmp(QueueBack(q), strtt) == 0) printf("QueueStruct ---back--- |Good|\n");
-        else printf("QueueStruct ---back--- |Bad|\n");
-        if(QueueFront(q) == NULL || structCmp(QueueFront(q), strtt) == 0) printf("QueueStruct ---front--- |Good|\n");
-        else printf("QueueStruct ---front--- |Bad|\n");
     }
     QueueDestroy(q);
     free(q);
@@ -321,11 +320,11 @@ void testVectorInt(){
     }
     printf("VectorInt ---vectorcapacity--- %d\n", VectorCapacity(v));
     for(int i=0; i<num; i++){
-        VectorPop(v);
-        if(VectorSize(v) == num-1-i) printf("VectorInt ---size--- |Good|\n");
+        if(VectorSize(v) == num-i) printf("VectorInt ---size--- |Good|\n");
         else printf("VectorInt ---size--- |Bad|\n");
-        if(VectorGet(v, VectorSize(v)-1) == NULL || *(int*)VectorGet(v, VectorSize(v)-1) == num-i-2) printf("VectorInt ---top--- |Good|\n");
+        if(*(int*)VectorGet(v, VectorSize(v)-1) == num-i-1) printf("VectorInt ---top--- |Good|\n");
         else printf("VectorInt ---top--- |Bad|\n");
+        VectorPop(v);
     }
     if(VectorSize(v) == 0) printf("VectorInt ---size--- |Good|\n");
     else printf("VectorInt ---size--- |Bad|\n");
@@ -338,11 +337,11 @@ void testVectorInt(){
     }
     printf("VectorInt ---vectorcapacity--- %d\n", VectorCapacity(v));
     for(int i=0; i<num; i++){
-        VectorShift(v);
-        if(VectorSize(v) == num-1-i) printf("VectorInt ---size--- |Good|\n");
+        if(VectorSize(v) == num-i) printf("VectorInt ---size--- |Good|\n");
         else printf("VectorInt ---size--- |Bad|\n");
-        if(VectorGet(v, 0) == NULL || *(int*)VectorGet(v, 0) == num-i-2) printf("VectorInt ---top--- |Good|\n");
+        if(*(int*)VectorGet(v, 0) == num-i-1) printf("VectorInt ---top--- |Good|\n");
         else printf("VectorInt ---top--- |Bad|\n");
+        VectorShift(v);
     }
     for(int i=0; i<num; i++){
         VectorUnshift(v, &i);
@@ -357,6 +356,10 @@ void testVectorInt(){
     }
     if(isSorted) printf("VectorInt ---sorted--- |Good|\n");
     else printf("VectorInt ---sorted--- |Bad|\n");
+    for(int i=0; i<num; i++){
+        if(VectorFind(v, intCmpFn, &i, i/2, 1) == i) printf("VectorInt ---find--- |Good|\n");
+        else printf("VectorInt ---find--- |Bad|\n");
+    }
     VectorDestroy(v);
     free(v);
 }
@@ -375,11 +378,11 @@ void testVectorChar(){
     }
     printf("VectorChar ---vectorcapacity--- %d\n", VectorCapacity(v));
     for(int i=0; i<num; i++){
-        VectorPop(v);
-        if(VectorSize(v) == num-1-i) printf("VectorChar ---size--- |Good|\n");
+        if(VectorSize(v) == num-i) printf("VectorChar ---size--- |Good|\n");
         else printf("VectorChar ---size--- |Bad|\n");
-        if(VectorGet(v, VectorSize(v)-1) == NULL || strcmp(*(char**)VectorGet(v, VectorSize(v)-1), txt) == 0) printf("VectorChar ---top--- |Good|\n");
+        if(strcmp(*(char**)VectorGet(v, VectorSize(v)-1), txt) == 0) printf("VectorChar ---top--- |Good|\n");
         else printf("VectorChar ---top--- |Bad|\n");
+        VectorPop(v);
     }
     if(VectorSize(v) == 0) printf("VectorChar ---size--- |Good|\n");
     else printf("VectorChar ---size--- |Bad|\n");
@@ -392,11 +395,11 @@ void testVectorChar(){
     }
     printf("VectorChar ---vectorcapacity--- %d\n", VectorCapacity(v));
     for(int i=0; i<num; i++){
-        VectorShift(v);
-        if(VectorSize(v) == num-1-i) printf("VectorChar ---size--- |Good|\n");
+        if(VectorSize(v) == num-i) printf("VectorChar ---size--- |Good|\n");
         else printf("VectorChar ---size--- |Bad|\n");
-        if(VectorGet(v, 0) == NULL || strcmp(*(char**)VectorGet(v, 0), txt) == 0) printf("VectorChar ---top--- |Good|\n");
+        if(strcmp(*(char**)VectorGet(v, 0), txt) == 0) printf("VectorChar ---top--- |Good|\n");
         else printf("VectorChar ---top--- |Bad|\n");
+        VectorShift(v);
     }
     VectorDestroy(v);
     free(v);
@@ -417,11 +420,11 @@ void testVectorStruct(){
     }
     printf("VectorStruct ---vectorcapacity--- %d\n", VectorCapacity(v));
     for(int i=0; i<num; i++){
-        VectorPop(v);
-        if(VectorSize(v) == num-1-i) printf("VectorStruct ---size--- |Good|\n");
+        if(VectorSize(v) == num-i) printf("VectorStruct ---size--- |Good|\n");
         else printf("VectorStruct ---size--- |Bad|\n");
-        if(VectorGet(v, VectorSize(v)-1) == NULL || structCmp(VectorGet(v, VectorSize(v)-1), strtt) == 0) printf("VectorStruct ---top--- |Good|\n");
+        if(structCmp(VectorGet(v, VectorSize(v)-1), strtt) == 0) printf("VectorStruct ---top--- |Good|\n");
         else printf("VectorStruct ---top--- |Bad|\n");
+        VectorPop(v);
     }
     if(VectorSize(v) == 0) printf("VectorStruct ---size--- |Good|\n");
     else printf("VectorStruct ---size--- |Bad|\n");
@@ -435,11 +438,11 @@ void testVectorStruct(){
     }
     printf("VectorStruct ---vectorcapacity--- %d\n", VectorCapacity(v));
     for(int i=0; i<num; i++){
-        VectorShift(v);
-        if(VectorSize(v) == num-1-i) printf("VectorStruct ---size--- |Good|\n");
+        if(VectorSize(v) == num-i) printf("VectorStruct ---size--- |Good|\n");
         else printf("VectorStruct ---size--- |Bad|\n");
-        if(VectorGet(v, 0) == NULL || structCmp(VectorGet(v, 0), strtt) == 0) printf("VectorStruct ---top--- |Good|\n");
+        if(structCmp(VectorGet(v, 0), strtt) == 0) printf("VectorStruct ---top--- |Good|\n");
         else printf("VectorStruct ---top--- |Bad|\n");
+        VectorShift(v);
     }
     VectorDestroy(v);
     free(v);
@@ -462,11 +465,11 @@ void testLinkedListGenericInt(){
         else printf("LinkedListGenericInt ---find--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListGenericPop(ll);
-        if(LinkedListGenericSize(ll) == num-1-i) printf("LinkedListGenericInt ---size--- |Good|\n");
+        if(LinkedListGenericSize(ll) == num-i) printf("LinkedListGenericInt ---size--- |Good|\n");
         else printf("LinkedListGenericInt ---size--- |Bad|\n");
-        if(LinkedListGenericGet(ll, LinkedListGenericSize(ll)-1) == NULL || *(int*)LinkedListGenericGet(ll, LinkedListGenericSize(ll)-1) == num-i-2) printf("LinkedListGenericInt ---top--- |Good|\n");
+        if(*(int*)LinkedListGenericGet(ll, LinkedListGenericSize(ll)-1) == num-i-1) printf("LinkedListGenericInt ---top--- |Good|\n");
         else printf("LinkedListGenericInt ---top--- |Bad|\n");
+        LinkedListGenericPop(ll);
     }
     if(LinkedListGenericSize(ll) == 0) printf("LinkedListGenericInt ---size--- |Good|\n");
     else printf("LinkedListGenericInt ---size--- |Bad|\n");
@@ -478,11 +481,11 @@ void testLinkedListGenericInt(){
         else printf("LinkedListGenericInt ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListGenericShift(ll);
-        if(LinkedListGenericSize(ll) == num-1-i) printf("LinkedListGenericInt ---size--- |Good|\n");
+        if(LinkedListGenericSize(ll) == num-i) printf("LinkedListGenericInt ---size--- |Good|\n");
         else printf("LinkedListGenericInt ---size--- |Bad|\n");
-        if(LinkedListGenericGet(ll, 0) == NULL || *(int*)LinkedListGenericGet(ll, 0) == num-i-2) printf("LinkedListGenericInt ---top--- |Good|\n");
+        if(*(int*)LinkedListGenericGet(ll, 0) == num-i-1) printf("LinkedListGenericInt ---top--- |Good|\n");
         else printf("LinkedListGenericInt ---top--- |Bad|\n");
+        LinkedListGenericShift(ll);
     }
     LinkedListGenericDestroy(ll);
     free(ll);
@@ -501,11 +504,11 @@ void testLinkedListGenericChar(){
         else printf("LinkedListGenericChar ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListGenericPop(ll);
-        if(LinkedListGenericSize(ll) == num-1-i) printf("LinkedListGenericChar ---size--- |Good|\n");
+        if(LinkedListGenericSize(ll) == num-i) printf("LinkedListGenericChar ---size--- |Good|\n");
         else printf("LinkedListGenericChar ---size--- |Bad|\n");
-        if(LinkedListGenericGet(ll, LinkedListGenericSize(ll)-1) == NULL || strcmp(*(char**)LinkedListGenericGet(ll, LinkedListGenericSize(ll)-1), txt) == 0) printf("LinkedListGenericChar ---top--- |Good|\n");
+        if(strcmp(*(char**)LinkedListGenericGet(ll, LinkedListGenericSize(ll)-1), txt) == 0) printf("LinkedListGenericChar ---top--- |Good|\n");
         else printf("LinkedListGenericChar ---top--- |Bad|\n");
+        LinkedListGenericPop(ll);
     }
     if(LinkedListGenericSize(ll) == 0) printf("LinkedListGenericChar ---size--- |Good|\n");
     else printf("LinkedListGenericChar ---size--- |Bad|\n");
@@ -517,11 +520,11 @@ void testLinkedListGenericChar(){
         else printf("LinkedListGenericChar ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListGenericShift(ll);
-        if(LinkedListGenericSize(ll) == num-1-i) printf("LinkedListGenericChar ---size--- |Good|\n");
+        if(LinkedListGenericSize(ll) == num-i) printf("LinkedListGenericChar ---size--- |Good|\n");
         else printf("LinkedListGenericChar ---size--- |Bad|\n");
-        if(LinkedListGenericGet(ll, 0) == NULL || strcmp(*(char**)LinkedListGenericGet(ll, 0), txt) == 0) printf("LinkedListGenericChar ---top--- |Good|\n");
+        if(strcmp(*(char**)LinkedListGenericGet(ll, 0), txt) == 0) printf("LinkedListGenericChar ---top--- |Good|\n");
         else printf("LinkedListGenericChar ---top--- |Bad|\n");
+        LinkedListGenericShift(ll);
     }
     LinkedListGenericDestroy(ll);
     free(ll);
@@ -541,11 +544,11 @@ void testLinkedListGenericStruct(){
         else printf("LinkedListGenericStruct ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListGenericPop(ll);
-        if(LinkedListGenericSize(ll) == num-1-i) printf("LinkedListGenericStruct ---size--- |Good|\n");
+        if(LinkedListGenericSize(ll) == num-i) printf("LinkedListGenericStruct ---size--- |Good|\n");
         else printf("LinkedListGenericStruct ---size--- |Bad|\n");
-        if(LinkedListGenericGet(ll, LinkedListGenericSize(ll)-1) == NULL || structCmp(LinkedListGenericGet(ll, LinkedListGenericSize(ll)-1), strtt) == 0) printf("LinkedListGenericStruct ---top--- |Good|\n");
+        if(structCmp(LinkedListGenericGet(ll, LinkedListGenericSize(ll)-1), strtt) == 0) printf("LinkedListGenericStruct ---top--- |Good|\n");
         else printf("LinkedListGenericStruct ---top--- |Bad|\n");
+        LinkedListGenericPop(ll);
     }
     if(LinkedListGenericSize(ll) == 0) printf("LinkedListGenericStruct ---size--- |Good|\n");
     else printf("LinkedListGenericStruct ---size--- |Bad|\n");
@@ -558,11 +561,11 @@ void testLinkedListGenericStruct(){
         else printf("LinkedListGenericStruct ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListGenericShift(ll);
-        if(LinkedListGenericSize(ll) == num-1-i) printf("LinkedListGenericStruct ---size--- |Good|\n");
+        if(LinkedListGenericSize(ll) == num-i) printf("LinkedListGenericStruct ---size--- |Good|\n");
         else printf("LinkedListGenericStruct ---size--- |Bad|\n");
-        if(LinkedListGenericGet(ll, 0) == NULL || structCmp(LinkedListGenericGet(ll, 0), strtt) == 0) printf("LinkedListGenericStruct ---top--- |Good|\n");
+        if(structCmp(LinkedListGenericGet(ll, 0), strtt) == 0) printf("LinkedListGenericStruct ---top--- |Good|\n");
         else printf("LinkedListGenericStruct ---top--- |Bad|\n");
+        LinkedListGenericShift(ll);
     }
     LinkedListGenericDestroy(ll);
     free(ll);
@@ -583,11 +586,11 @@ void testLinkedListInt(){
         else printf("LinkedListInt ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListPop(ll);
-        if(LinkedListSize(ll) == num-1-i) printf("LinkedListInt ---size--- |Good|\n");
+        if(LinkedListSize(ll) == num-i) printf("LinkedListInt ---size--- |Good|\n");
         else printf("LinkedListInt ---size--- |Bad|\n");
-        if(LinkedListGet(ll, LinkedListSize(ll)-1) == NULL || *(int*)LinkedListGet(ll, LinkedListSize(ll)-1) == num-i-2) printf("LinkedListInt ---top--- |Good|\n");
+        if(*(int*)LinkedListGet(ll, LinkedListSize(ll)-1) == num-i-1) printf("LinkedListInt ---top--- |Good|\n");
         else printf("LinkedListInt ---top--- |Bad|\n");
+        LinkedListPop(ll);
     }
     if(LinkedListSize(ll) == 0) printf("LinkedListInt ---size--- |Good|\n");
     else printf("LinkedListInt ---size--- |Bad|\n");
@@ -599,11 +602,11 @@ void testLinkedListInt(){
         else printf("LinkedListInt ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListShift(ll);
-        if(LinkedListSize(ll) == num-1-i) printf("LinkedListInt ---size--- |Good|\n");
+        if(LinkedListSize(ll) == num-i) printf("LinkedListInt ---size--- |Good|\n");
         else printf("LinkedListInt ---size--- |Bad|\n");
-        if(LinkedListGet(ll, 0) == NULL || *(int*)LinkedListGet(ll, 0) == num-i-2) printf("LinkedListInt ---top--- |Good|\n");
+        if(*(int*)LinkedListGet(ll, 0) == num-i-1) printf("LinkedListInt ---top--- |Good|\n");
         else printf("LinkedListInt ---top--- |Bad|\n");
+        LinkedListShift(ll);
     }
     LinkedListDestroy(ll);
     free(ll);
@@ -623,11 +626,11 @@ void testLinkedListChar(){
         else printf("LinkedListChar ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListPop(ll);
-        if(LinkedListSize(ll) == num-1-i) printf("LinkedListChar ---size--- |Good|\n");
+        if(LinkedListSize(ll) == num-i) printf("LinkedListChar ---size--- |Good|\n");
         else printf("LinkedListChar ---size--- |Bad|\n");
-        if(LinkedListGet(ll, LinkedListSize(ll)-1) == NULL || strcmp(*(char**)LinkedListGet(ll, LinkedListSize(ll)-1), txt) == 0) printf("LinkedListChar ---top--- |Good|\n");
+        if(strcmp(*(char**)LinkedListGet(ll, LinkedListSize(ll)-1), txt) == 0) printf("LinkedListChar ---top--- |Good|\n");
         else printf("LinkedListChar ---top--- |Bad|\n");
+        LinkedListPop(ll);
     }
     if(LinkedListSize(ll) == 0) printf("LinkedListChar ---size--- |Good|\n");
     else printf("LinkedListChar ---size--- |Bad|\n");
@@ -639,11 +642,11 @@ void testLinkedListChar(){
         else printf("LinkedListChar ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListShift(ll);
-        if(LinkedListSize(ll) == num-1-i) printf("LinkedListChar ---size--- |Good|\n");
+        if(LinkedListSize(ll) == num-i) printf("LinkedListChar ---size--- |Good|\n");
         else printf("LinkedListChar ---size--- |Bad|\n");
-        if(LinkedListGet(ll, 0) == NULL || strcmp(*(char**)LinkedListGet(ll, 0), txt) == 0) printf("LinkedListChar ---top--- |Good|\n");
+        if(strcmp(*(char**)LinkedListGet(ll, 0), txt) == 0) printf("LinkedListChar ---top--- |Good|\n");
         else printf("LinkedListChar ---top--- |Bad|\n");
+        LinkedListShift(ll);
     }
     LinkedListDestroy(ll);
     free(ll);
@@ -664,11 +667,11 @@ void testLinkedListStruct(){
         else printf("LinkedListStruct ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListPop(ll);
-        if(LinkedListSize(ll) == num-1-i) printf("LinkedListStruct ---size--- |Good|\n");
+        if(LinkedListSize(ll) == num-i) printf("LinkedListStruct ---size--- |Good|\n");
         else printf("LinkedListStruct ---size--- |Bad|\n");
-        if(LinkedListGet(ll, LinkedListSize(ll)-1) == NULL || structCmp(LinkedListGet(ll, LinkedListSize(ll)-1), strtt) == 0) printf("LinkedListStruct ---top--- |Good|\n");
+        if(structCmp(LinkedListGet(ll, LinkedListSize(ll)-1), strtt) == 0) printf("LinkedListStruct ---top--- |Good|\n");
         else printf("LinkedListStruct ---top--- |Bad|\n");
+        LinkedListPop(ll);
     }
     if(LinkedListSize(ll) == 0) printf("LinkedListStruct ---size--- |Good|\n");
     else printf("LinkedListStruct ---size--- |Bad|\n");
@@ -681,11 +684,11 @@ void testLinkedListStruct(){
         else printf("LinkedListStruct ---get--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
-        LinkedListShift(ll);
-        if(LinkedListSize(ll) == num-1-i) printf("LinkedListStruct ---size--- |Good|\n");
+        if(LinkedListSize(ll) == num-i) printf("LinkedListStruct ---size--- |Good|\n");
         else printf("LinkedListStruct ---size--- |Bad|\n");
-        if(LinkedListGet(ll, 0) == NULL || structCmp(LinkedListGet(ll, 0), strtt) == 0) printf("LinkedListStruct ---top--- |Good|\n");
+        if(structCmp(LinkedListGet(ll, 0), strtt) == 0) printf("LinkedListStruct ---top--- |Good|\n");
         else printf("LinkedListStruct ---top--- |Bad|\n");
+        LinkedListShift(ll);
     }
     LinkedListDestroy(ll);
     free(ll);
