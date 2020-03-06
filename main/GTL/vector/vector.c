@@ -74,6 +74,19 @@ void VectorSort(Vector* vec, VectorCompareFunction cmpFn){
     qsort(vec->base, vec->logLen, vec->elem_size, cmpFn);
 }
 
+int VectorFind(Vector* vec, VectorCompareFunction cmpFn, const void* elem, int startIndex, int isSorted){
+    if(isSorted) {
+        void* res = bsearch(elem, (char*)vec->base + startIndex * vec->elem_size, vec->logLen, vec->elem_size, cmpFn);
+        return res == NULL ? -1 : (res - vec->base) / vec->elem_size;
+    }
+    for(int i=startIndex; i<vec->logLen; i++){
+        void* temp = (char*)vec->base + i*vec->elem_size;
+        if(cmpFn(elem, temp) == 0) return i;
+    }
+    return -1;
+}
+
+
 void VectorDestroy(Vector* vec){
     if(vec->freeFn != NULL){
         for(int i=0; i<vec->logLen; i++){

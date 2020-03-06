@@ -38,6 +38,8 @@ void VectorUnshift(Vector* vec, void* elem);
 
 void VectorSort(Vector* vec, VectorCompareFunction cmpFn);
 
+int VectorFind(Vector* vec, VectorCompareFunction cmpFn, const void* elem, int startIndex, int isSorted);
+
 void VectorDestroy(Vector* vec);
 
 #endif

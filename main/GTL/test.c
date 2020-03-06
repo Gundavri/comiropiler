@@ -17,7 +17,7 @@ typedef struct{
  void* f;
 } tt;
 
-int num = 3000;
+int num = 1000;
 char* txt = "abcde-!@#$^&*()+zxc";
 tt* strtt;
 
@@ -43,10 +43,15 @@ int structCmp(tt* tt1, tt* tt2){
     return 0;
 }
 
-int compareFn(const void* vp1, const void* vp2){
+int structCmpFn(const void* vp1, const void* vp2){
     int a = *(int*)vp1;
     int b = *(int*)vp2;
     return a-b;
+}
+
+int intCmpFn(const void* vp1, const void* vp2){
+    if(*(int*)vp1 == *(int*)vp2) return 0;
+    return -1;
 }
 
 void StructFreeFn(void* elem){
@@ -92,8 +97,8 @@ void testLinkedListStruct();
 
 
 int main(){
-    testStack();
-    testQueue();
+    // testStack();
+    // testQueue();
     testVector();
     testLinkedListGeneric();
     // testLinkedList();
@@ -114,15 +119,15 @@ void testQueue() {
 }
 
 void testVector(){
-    // testVectorInt();
+    testVectorInt();
     // testVectorChar();
-    testVectorStruct();
+    // testVectorStruct();
 }
 
 void testLinkedListGeneric(){
-    // testLinkedListGenericInt();
+    testLinkedListGenericInt();
     // testLinkedListGenericChar();
-    testLinkedListGenericStruct();
+    // testLinkedListGenericStruct();
 }
 
 void testLinkedList(){
@@ -311,6 +316,8 @@ void testVectorInt(){
         else printf("VectorInt ---size--- |Bad|\n");
         if(*(int*)VectorGet(v, VectorSize(v)-1) == i) printf("VectorInt ---get--- |Good|\n");
         else printf("VectorInt ---get--- |Bad|\n");
+        if(VectorFind(v, intCmpFn, &i, i>1 ? i-1 : 0, 0) == i) printf("VectorInt ---find--- |Good|\n");
+        else printf("VectorInt ---find--- |Bad|\n");
     }
     printf("VectorInt ---vectorcapacity--- %d\n", VectorCapacity(v));
     for(int i=0; i<num; i++){
@@ -340,7 +347,7 @@ void testVectorInt(){
     for(int i=0; i<num; i++){
         VectorUnshift(v, &i);
     }
-    VectorSort(v, compareFn);
+    VectorSort(v, structCmpFn);
     int isSorted = 1;
     for(int i=0; i<num; i++){
         if(*(int*)VectorGet(v, i) != i){
@@ -451,6 +458,8 @@ void testLinkedListGenericInt(){
         else printf("LinkedListGenericInt ---size--- |Bad|\n");
         if(*(int*)LinkedListGenericGet(ll, LinkedListGenericSize(ll)-1) == i) printf("LinkedListGenericInt ---get--- |Good|\n");
         else printf("LinkedListGenericInt ---get--- |Bad|\n");
+        if(LinkedListGenericFind(ll, &i, intCmpFn, i>1 ? i-1 : 0, NULL) == i) printf("LinkedListGenericInt ---find--- |Good|\n");
+        else printf("LinkedListGenericInt ---find--- |Bad|\n");
     }
     for(int i=0; i<num; i++){
         LinkedListGenericPop(ll);
@@ -640,6 +649,7 @@ void testLinkedListChar(){
     free(ll);
 }
 
+
 void testLinkedListStruct(){
     LinkedList* ll = malloc(sizeof(ll));
     LinkedListNew(ll, sizeof(tt), StructFreeFn);
@@ -680,3 +690,5 @@ void testLinkedListStruct(){
     LinkedListDestroy(ll);
     free(ll);
 }
+
+

@@ -89,6 +89,18 @@ void LinkedListGenericUnshift(LinkedListGeneric* ll, void* elem, int elem_size, 
     LinkedListGenericInsert(ll, elem, elem_size, freeFn, 0);
 }
 
+int LinkedListGenericFind(LinkedListGeneric* ll, const void* elem, LLCompareFunction cmpFn, int startIndex, CellGFreeFunction freeFn){
+    for(int i=0; i< ll->length; i++){
+        void* temp = LinkedListGenericGet(ll, i);
+        if(cmpFn(temp, elem) == 0){
+            if(freeFn != NULL) freeFn(temp);
+            return i;
+        }
+        if(freeFn != NULL) freeFn(temp);
+    }
+    return -1;
+}
+
 
 void LinkedListGenericDestroy(LinkedListGeneric* ll){
     for(int i=0; i<ll->length; i++){

@@ -2,6 +2,7 @@
 #define _LinkedListGeneric_
 
 typedef void (*CellGFreeFunction)(void *elem);
+typedef int (*LLCompareFunction)(const void *elem1, const void *elem2);
 
 typedef struct nCellG {
     void* base;
@@ -35,6 +36,8 @@ void LinkedListGenericPop(LinkedListGeneric* ll);
 void LinkedListGenericShift(LinkedListGeneric* ll);
 
 void LinkedListGenericUnshift(LinkedListGeneric* ll, void* elem, int elem_size, CellGFreeFunction freeFn);
+
+int LinkedListGenericFind(LinkedListGeneric* ll, const void* elem, LLCompareFunction cmpFn, int startIndex, CellGFreeFunction freeFn);
 
 void LinkedListGenericDestroy(LinkedListGeneric* ll);
 
